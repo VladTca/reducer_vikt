@@ -1,7 +1,7 @@
 import { TaskType } from './App'
 import {v1} from "uuid";
 
-export const tasksReducer = (state: TaskType[], action: any): TaskType[] => {
+export const tasksReducer = (state: TaskType[], action: ActionsType): TaskType[] => {
     switch (action.type) {
         case 'REMOVE-TASK':
             return state.filter(task => task.id !== action.payload.id)
@@ -16,7 +16,21 @@ export const tasksReducer = (state: TaskType[], action: any): TaskType[] => {
             return state
     }
 }
+type RemoveTaskActionType = {
+    type: 'REMOVE-TASK'
+    payload: {
+        id: string
+    }
+}
+type AddTaskActionType = {
+    type: 'ADD-TASK'
+    payload: {
+        title: string
+    }
+}
 
+
+type ActionsType = RemoveTaskActionType | AddTaskActionType
 export const removeTaskAC = (id: string): RemoveTaskActionType => {
     return {
         type: 'REMOVE-TASK',
@@ -35,17 +49,4 @@ export const addTaskAC = (title: string): AddTaskActionType => {
     } as const
 }
 
-type RemoveTaskActionType = {
-    type: 'REMOVE-TASK'
-    payload: {
-        id: string
-    }
-}
-type AddTaskActionType = {
-    type: 'ADD-TASK'
-    payload: {
-        title: string
-    }
-}
 
-type ActionsType = RemoveTaskActionType | AddTaskActionType
