@@ -9,7 +9,7 @@ const initialState: TodolistType[] = [
     {id: todolistID2, title: 'What to buy', filter: 'all'},
 ]
 
-type AddTodolistActionsType = {
+export type AddTodolistActionsType = {
     type: 'ADD-TODOLIST'
     payload: {
         title: string
@@ -43,6 +43,7 @@ type ActionType =
     | ChangeTodolistTitleActionsType
     | ChangeTodolistFilterActionsType
 
+
 export const todolistsReducer = (todolists: TodolistType[] = initialState, action: ActionType): TodolistType[] => {
     switch (action.type) {
         case 'REMOVE-TODOLIST': {
@@ -61,6 +62,7 @@ export const todolistsReducer = (todolists: TodolistType[] = initialState, actio
             const {id, filter} = action.payload
             return todolists.map(tl => tl.id === id ? {...tl, filter} : tl)
         }
+
         default:
             return todolists
     }
