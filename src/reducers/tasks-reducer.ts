@@ -1,35 +1,55 @@
-import {FilterValuesType, TasksStateType, TodolistType} from '../App'
-import {v1} from 'uuid'
+import {TasksStateType} from '../App'
+import {v1} from "uuid";
 
-let todolistID1 = v1()
-let todolistID2 = v1()
 
-const initialState: TodolistType[] = [
-    {id: todolistID1, title: 'What to learn', filter: 'all'},
-    {id: todolistID2, title: 'What to buy', filter: 'all'},
-]
-
-export type FirstActionType = ReturnType<typeof firstAC>
-
+export type RemoveTaskActionsType = ReturnType<typeof removeTaskAC>
+export type AddTaskActionsType = ReturnType<typeof addTaskAC>
 
 type ActionType =
-    FirstActionType
+    AddTaskActionsType |
+    RemoveTaskActionsType
 
 export const tasksReducer = (state: TasksStateType, action: ActionType): TasksStateType => {
     switch (action.type) {
-        case '':
-            return state
+        case 'REMOVE-TASK': {
+            return {
+                ...state,
+                [action.payload.todolistId]: state[action.payload.todolistId]
+                    .filter(t => t.id !== action.payload.tasksId)
+            }
 
-
+        }
+        case "ADD-TASK": {
+            return {
+                ...state,
+                [action.payload.todolistId]: [{
+                    id: v1(),
+                    title: action.payload.title,
+                    isDone: false
+                }, ...state[action.payload.todolistId]]
+            }
+        }
         default:
             throw new Error('I don\'t understand this type')
-        }
     }
-
-export const firstAC = (todolistId: string) => {
-    return {
-        type: ''
-    } as const
 }
 
+export const removeTaskAC = (tasksId: string, todolistId: string) => {
+    return {
+        type: 'REMOVE-TASK',
+        payload: {
+            tasksId,
+            todolistId
+        }
+    } as const
+}
+export const addTaskAC = (title: string, todolistId: string) => {
+    return {
+        type: 'ADD-TASK',
+        payload: {
+            title,
+            todolistId
+        }
+    } as const
+}
 
