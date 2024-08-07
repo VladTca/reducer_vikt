@@ -16,7 +16,7 @@ export type AddTodolistActionsType = {
         id: string
     }
 }
-type RemoveTodolistActionsType = {
+export type RemoveTodolistActionsType = {
     type: 'REMOVE-TODOLIST'
     payload: {
         id: string
