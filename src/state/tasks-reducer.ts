@@ -33,11 +33,10 @@ export const tasksReducer = (state = initialState, action: ActionType): TasksSta
         case "ADD-TASK": {
             return {
                 ...state,
-                [action.payload.todolistId]: [{
-                    id: v1(),
-                    title: action.payload.title,
-                    isDone: false
-                }, ...state[action.payload.todolistId]]
+                [action.payload.todolistId]: [
+                    {id: v1(), title: action.payload.title, isDone: false},
+                    ...state[action.payload.todolistId]
+                ]
             }
         }
         case "CHANGE-TASK-STATUS": {

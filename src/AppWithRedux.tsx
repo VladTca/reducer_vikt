@@ -24,6 +24,7 @@ import {
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./state/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
+import {Todolist1} from "./Todolist1";
 
 export type TaskType = {
     id: string
@@ -49,6 +50,8 @@ function AppWithRedux() {
 
     let todolistID1 = v1()
     let todolistID2 = v1()
+
+
 
     // const initTodolists=():Array<TodolistType>=> {
     //     return [
@@ -196,21 +199,11 @@ const dispatch =useDispatch()
                         }
 
                         return (
-                            <Grid>
+                            <Grid key={tl.id} >
                                 <Paper sx={{p: '0 20px 20px 20px'}}>
-                                    <Todolist
-                                        key={tl.id}
-                                        todolistId={tl.id}
-                                        title={tl.title}
-                                        tasks={tasksForTodolist}
-                                        removeTask={removeTask}
-                                        changeFilter={changeFilter}
-                                        addTask={addTask}
-                                        changeTaskStatus={changeTaskStatus}
-                                        filter={tl.filter}
-                                        removeTodolist={removeTodolist}
-                                        updateTask={updateTask}
-                                        updateTodolist={updateTodolist}
+                                    <Todolist1
+                                        todolist={tl}
+
                                     />
                                 </Paper>
                             </Grid>
