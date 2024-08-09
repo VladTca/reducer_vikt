@@ -2,15 +2,27 @@ import {AddTodolistAC, ChangeTodolistFilterAC, RemoveTodolistAC, todolistsReduce
 import {v1} from 'uuid'
 import {TodolistType} from '../App'
 
-test('correct todolist should be removed', () => {
-    let todolistId1 = v1()
-    let todolistId2 = v1()
+
+
+let todolistId1 = v1()
+let todolistId2 = v1()
+
+let startState: TodolistType[]
+
+beforeEach(()=>{
+    todolistId1 = v1()
+    todolistId2 = v1()
 
     // 1. Стартовый state
-    const startState: TodolistType[] = [
+    startState= [
         {id: todolistId1, title: 'What to learn', filter: 'all'},
         {id: todolistId2, title: 'What to buy', filter: 'all'},
     ]
+
+})
+
+test('correct todolist should be removed', () => {
+
 
     // 2. Действие
     const action = {
@@ -29,13 +41,13 @@ test('correct todolist should be removed', () => {
 })
 
 test('correct todolist should be added', () => {
-    let todolistId1 = v1()
-    let todolistId2 = v1()
-
-    const startState: TodolistType[] = [
-        {id: todolistId1, title: 'What to learn', filter: 'all'},
-        {id: todolistId2, title: 'What to buy', filter: 'all'},
-    ]
+    // let todolistId1 = v1()
+    // let todolistId2 = v1()
+    //
+    // const startState: TodolistType[] = [
+    //     {id: todolistId1, title: 'What to learn', filter: 'all'},
+    //     {id: todolistId2, title: 'What to buy', filter: 'all'},
+    // ]
 
     // const action = {
     //     type: 'ADD-TODOLIST',
@@ -55,13 +67,13 @@ test('correct todolist should be added', () => {
     expect(endState[0].title).toBe(newTodolistTitle)
 })
 test('correct todolist should change its name', () => {
-    let todolistId1 = v1()
-    let todolistId2 = v1()
-
-    const startState: TodolistType[] = [
-        {id: todolistId1, title: 'What to learn', filter: 'all'},
-        {id: todolistId2, title: 'What to buy', filter: 'all'},
-    ]
+    // let todolistId1 = v1()
+    // let todolistId2 = v1()
+    //
+    // const startState: TodolistType[] = [
+    //     {id: todolistId1, title: 'What to learn', filter: 'all'},
+    //     {id: todolistId2, title: 'What to buy', filter: 'all'},
+    // ]
 
     // const action = {
     //     type: 'CHANGE-TODOLIST-TITLE',
@@ -80,13 +92,13 @@ test('correct todolist should change its name', () => {
 })
 
 test('correct filter of todolist should be changed', () => {
-    let todolistId1 = v1()
-    let todolistId2 = v1()
-
-    const startState: TodolistType[] = [
-        {id: todolistId1, title: 'What to learn', filter: 'all'},
-        {id: todolistId2, title: 'What to buy', filter: 'all'},
-    ]
+    // let todolistId1 = v1()
+    // let todolistId2 = v1()
+    //
+    // const startState: TodolistType[] = [
+    //     {id: todolistId1, title: 'What to learn', filter: 'all'},
+    //     {id: todolistId2, title: 'What to buy', filter: 'all'},
+    // ]
 
     // const action = {
     //     type: 'CHANGE-TODOLIST-FILTER',
