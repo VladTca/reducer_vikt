@@ -4,7 +4,7 @@ import {v1} from 'uuid'
 let todolistID1 = v1()
 let todolistID2 = v1()
 
-const initialState: TodolistType[] = [
+const initState: TodolistType[] = [
     {id: todolistID1, title: 'What to learn', filter: 'all'},
     {id: todolistID2, title: 'What to buy', filter: 'all'},
 ]
@@ -43,28 +43,30 @@ export type ActionType =
     | ChangeTodolistTitleActionsType
     | ChangeTodolistFilterActionsType
 
+const initialState: Array<TodolistType> = []
 
-export const todolistsReducer = (todolists: TodolistType[] = initialState, action: ActionType): TodolistType[] => {
+
+export const todolistsReducer = (state = initialState, action: ActionType): TodolistType[] => {
     switch (action.type) {
         case 'REMOVE-TODOLIST': {
-            return todolists.filter(tl => tl.id !== action.payload.id)
+            return state.filter(tl => tl.id !== action.payload.id)
 
         }
         case 'ADD-TODOLIST': {
             const {id, title} = action.payload
-            return [{id, title, filter: 'all'}, ...todolists]
+            return [{id, title, filter: 'all'}, ...state]
         }
         case 'CHANGE-TODOLIST-TITLE': {
             const {id, title} = action.payload
-            return todolists.map(tl => tl.id === id ? {...tl, title} : tl)
+            return state.map(tl => tl.id === id ? {...tl, title} : tl)
         }
         case 'CHANGE-TODOLIST-FILTER': {
             const {id, filter} = action.payload
-            return todolists.map(tl => tl.id === id ? {...tl, filter} : tl)
+            return state.map(tl => tl.id === id ? {...tl, filter} : tl)
         }
 
         default:
-            return todolists
+            return state
     }
 }
 
