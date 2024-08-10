@@ -37,6 +37,7 @@ type ChangeTodolistFilterActionsType = {
     }
 }
 
+
 export type ActionType =
     AddTodolistActionsType
     | RemoveTodolistActionsType

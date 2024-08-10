@@ -1,4 +1,10 @@
-import {AddTodolistAC, ChangeTodolistFilterAC, RemoveTodolistAC, todolistsReducer} from './todolists-reducer'
+import {
+    AddTodolistAC,
+    ChangeTodolistFilterAC,
+    ChangeTodolistTitleAC,
+    RemoveTodolistAC,
+    todolistsReducer
+} from './todolists-reducer'
 import {v1} from 'uuid'
 import {TodolistType} from '../App'
 
@@ -84,7 +90,7 @@ test('correct todolist should change its name', () => {
     // } as const
     // const endState = todolistsReducer(startState, action)
 
-    const endState = todolistsReducer(startState, RemoveTodolistAC(todolistId1))
+    const endState = todolistsReducer(startState, ChangeTodolistTitleAC(todolistId2, 'New Todolist'))
 
     expect(endState.length).toBe(1)
 
