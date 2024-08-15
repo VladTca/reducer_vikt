@@ -54,6 +54,27 @@ export const Todolist1 = ({todolist}: PropsType) => {
         dispatch(ChangeTodolistTitleAC(id, title));
     };
 
+
+const onAllTasksClickHandler = () => {
+    changeFilterTasksHandler('all');
+};
+const onActiveTasksClickHandler = () => {
+    changeFilterTasksHandler('active');
+};
+const onCompletedTasksClickHandler = () => {
+    changeFilterTasksHandler('completed');
+};
+
+
+    if (filter === 'active') {
+        tasks = tasks.filter(task => !task.isDone)
+    }
+
+    if (filter === 'completed') {
+        tasks = tasks.filter(task => task.isDone)
+    }
+
+
     return (
         <div>
             <div className={"todolist-title-container"}>
@@ -94,22 +115,22 @@ export const Todolist1 = ({todolist}: PropsType) => {
                     </List>
             }
             <Box sx={filterButtonsContainerSx}>
-                <Button
+                memo(<Button
                     variant={filter === 'all' ? 'outlined' : 'text'}
                     color={'inherit'}
-                    onClick={() => changeFilterTasksHandler('all')}>
+                    onClick={onAllTasksClickHandler}>
                     All
-                </Button>
+                </Button>)
                 <Button
                     variant={filter === 'active' ? 'outlined' : 'text'}
                     color={'primary'}
-                    onClick={() => changeFilterTasksHandler('active')}>
+                    onClick={onActiveTasksClickHandler}>
                     Active
                 </Button>
                 <Button
                     variant={filter === 'completed' ? 'outlined' : 'text'}
                     color={'secondary'}
-                    onClick={() => changeFilterTasksHandler('completed')}>
+                    onClick={onCompletedTasksClickHandler}>
                     Completed
                 </Button>
             </Box>
