@@ -1,4 +1,4 @@
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent, memo, useState} from "react";
 import TextField from "@mui/material/TextField";
 
 type PropsType = {
@@ -6,7 +6,7 @@ type PropsType = {
 	onChange: (newTitle: string) => void
 };
 
-export const EditableSpan = ({value, onChange}: PropsType) => {
+export const EditableSpan = memo(({value, onChange}: PropsType) => {
 	const [editMode, setEditMode] = useState(false)
 	const [title, setTitle] = useState(value)
 
@@ -39,4 +39,4 @@ export const EditableSpan = ({value, onChange}: PropsType) => {
 			}
 		</>
 	);
-};
+})

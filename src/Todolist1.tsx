@@ -1,79 +1,75 @@
 import {FilterValuesType, TaskType} from "./App";
-import {ChangeEvent} from "react";
+import {useCallback, useMemo} from "react";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Button from "@mui/material/Button";
-import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import Box from "@mui/material/Box";
-import {filterButtonsContainerSx, getListItemSx} from "./Todolist.styles";
+import {filterButtonsContainerSx} from "./Todolist.styles";
 import {TodolistType} from "./AppWithRedux";
 import {AppRootStateType} from "./state/store";
 import {useDispatch, useSelector} from "react-redux";
-import {
-    AddTodolistAC,
-    ChangeTodolistFilterAC,
-    ChangeTodolistTitleAC,
-    RemoveTodolistAC
-} from "./state/todolists-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/tasks-reducer";
+import {ChangeTodolistFilterAC, ChangeTodolistTitleAC, RemoveTodolistAC} from "./state/todolists-reducer";
+import {addTaskAC} from "./state/tasks-reducer";
+import {MemoButton} from "./MemoButton";
+import {Task} from "./Task";
 
 
 type PropsType = {
     todolist: TodolistType
-}
+};
 
 export const Todolist1 = ({todolist}: PropsType) => {
     const {
         id,
         title,
         filter,
+    } = todolist;
 
-    } = todolist
-    let tasks =
-        useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[id])
+    const tasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[id]);
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
-    const changeFilterTasksHandler = (filter: FilterValuesType) => {
+    const changeFilterTasksHandler = useCallback((filter: FilterValuesType) => {
         dispatch(ChangeTodolistFilterAC(id, filter));
-    };
+    }, [dispatch, id]);
 
-    const removeTodolistHandler = () => {
+    const removeTodolistHandler = useCallback(() => {
         dispatch(RemoveTodolistAC(id));
-    };
+    }, [dispatch, id]);
 
-    const addTaskCallback = (title: string) => {
+    const addTaskCallback = useCallback((title: string) => {
         dispatch(addTaskAC(title, id));
-    };
+    }, [dispatch, id]);
 
-    const updateTodolistHandler = (title: string) => {
+    const updateTodolistHandler = useCallback((title: string) => {
         dispatch(ChangeTodolistTitleAC(id, title));
-    };
+    }, [dispatch, id]);
 
+    const onAllTasksClickHandler = useCallback(() => {
+        changeFilterTasksHandler('all');
+    }, [changeFilterTasksHandler]);
 
-const onAllTasksClickHandler = () => {
-    changeFilterTasksHandler('all');
-};
-const onActiveTasksClickHandler = () => {
-    changeFilterTasksHandler('active');
-};
-const onCompletedTasksClickHandler = () => {
-    changeFilterTasksHandler('completed');
-};
+    const onActiveTasksClickHandler = useCallback(() => {
+        changeFilterTasksHandler('active');
+    }, [changeFilterTasksHandler]);
 
+    const onCompletedTasksClickHandler = useCallback(() => {
+        changeFilterTasksHandler('completed');
+    }, [changeFilterTasksHandler]);
 
-    if (filter === 'active') {
-        tasks = tasks.filter(task => !task.isDone)
-    }
-
-    if (filter === 'completed') {
-        tasks = tasks.filter(task => task.isDone)
-    }
-
+    const filteredTasks = useMemo(() => {
+        switch (filter) {
+            case 'active':
+                return tasks.filter(task => !task.isDone);
+            case 'completed':
+                return tasks.filter(task => task.isDone);
+            case 'all':
+            default:
+                return tasks;
+        }
+    }, [tasks, filter]);
 
     return (
         <div>
@@ -85,55 +81,34 @@ const onCompletedTasksClickHandler = () => {
             </div>
             <AddItemForm addItem={addTaskCallback}/>
             {
-                tasks.length === 0
+                filteredTasks.length === 0
                     ? <p>Тасок нет</p>
                     : <List>
-                        {tasks.map((task) => {
-
-                            const removeTaskHandler = () => {
-                                dispatch(removeTaskAC(task.id, id));
-                            };
-
-                            const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                                const newStatusValue = e.currentTarget.checked;
-                                dispatch(changeTaskStatusAC(task.id, newStatusValue, id));
-                            };
-
-                            const changeTaskTitleHandler = (title: string) => {
-                                dispatch(changeTaskTitleAC(task.id, title, id));
-                            };
-                            return <ListItem key={task.id} sx={getListItemSx(task.isDone)}>
-                                <div>
-                                    <Checkbox checked={task.isDone} onChange={changeTaskStatusHandler}/>
-                                    <EditableSpan value={task.title} onChange={changeTaskTitleHandler}/>
-                                </div>
-                                <IconButton onClick={removeTaskHandler}>
-                                    <DeleteIcon/>
-                                </IconButton>
-                            </ListItem>
-                        })}
+                        {filteredTasks.map((task) => (
+                            <Task key={task.id} task={task} id={id}/>
+                        ))}
                     </List>
             }
             <Box sx={filterButtonsContainerSx}>
-                memo(<Button
+                <MemoButton
                     variant={filter === 'all' ? 'outlined' : 'text'}
                     color={'inherit'}
-                    onClick={onAllTasksClickHandler}>
-                    All
-                </Button>)
-                <Button
+                    onClick={onAllTasksClickHandler}
+                    title={'All'}
+                />
+                <MemoButton
                     variant={filter === 'active' ? 'outlined' : 'text'}
                     color={'primary'}
-                    onClick={onActiveTasksClickHandler}>
-                    Active
-                </Button>
-                <Button
+                    onClick={onActiveTasksClickHandler}
+                    title={'Active'}
+                />
+                <MemoButton
                     variant={filter === 'completed' ? 'outlined' : 'text'}
                     color={'secondary'}
-                    onClick={onCompletedTasksClickHandler}>
-                    Completed
-                </Button>
+                    onClick={onCompletedTasksClickHandler}
+                    title={'Completed'}
+                />
             </Box>
         </div>
-    )
-}
+    );
+};
