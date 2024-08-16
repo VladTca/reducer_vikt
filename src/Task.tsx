@@ -11,7 +11,7 @@ import {TaskType} from "./AppWithRedux";
 import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/tasks-reducer";
 import {useDispatch} from "react-redux";
 
-type TaskPropsType = {
+export type TaskPropsType = {
     task: TaskType,
     id: string
 };
